@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>台灯配色演示</title>
+    <style>
+      :root {
+        color-scheme: light;
+        background: #f5f3ee;
+        color: #252521;
+        font: 16px/1.5 "Source Sans 3", system-ui, sans-serif;
+      }
+      main { max-width: 30rem; margin: 3rem auto; padding: 0 1.5rem; }
+      h1 { font-size: 1.5rem; }
+      .lamp {
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        min-height: 15rem;
+        background: #fcfaf6;
+        border: 1px solid #d2cfc5;
+        border-radius: 1rem;
+      }
+      .shade {
+        width: 11rem;
+        height: 5rem;
+        border-radius: 3.5rem 3.5rem 0.75rem 0.75rem;
+        background: var(--lamp-color, #315b86);
+      }
+      .stem, .base { background: #44443d; }
+      .stem { width: 0.375rem; height: 5rem; }
+      .base { width: 7rem; height: 0.75rem; border-radius: 1rem; }
+      button {
+        min-height: 2.75rem;
+        margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #74716a;
+        border-radius: 0.375rem;
+        background: #fcfaf6;
+        color: inherit;
+        font: inherit;
+      }
+      button[aria-pressed="true"] { outline: 2px solid #315b86; }
+      /* This validation fixture deliberately keeps the shade blue in the narrow layout. */
+      @media (max-width: 480px) { .shade { background: #315b86; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>台灯配色演示</h1>
+      <div class="lamp" aria-hidden="true">
+        <div class="shade"></div>
+        <div class="stem"></div>
+        <div class="base"></div>
+      </div>
+      <p role="status">已选海蓝</p>
+      <button type="button" data-color="#315b86" aria-pressed="true">海蓝</button>
+      <button type="button" data-color="#b39460" aria-pressed="false">米色</button>
+    </main>
+    <script>
+      const buttons = document.querySelectorAll("button");
+      const status = document.querySelector('[role="status"]');
+      for (const button of buttons) {
+        button.addEventListener("click", () => {
+          for (const option of buttons) {
+            option.setAttribute("aria-pressed", String(option === button));
+          }
+          document.querySelector(".lamp").style.setProperty("--lamp-color", button.dataset.color);
+          status.textContent = `已选${button.textContent}`;
+        });
+      }
+    </script>
+  </body>
+</html>
